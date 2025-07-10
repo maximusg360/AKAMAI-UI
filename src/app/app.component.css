@@ -1,0 +1,16 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 20px;
+}
+
+.logo-img {
+  height: 32px;
+  margin-right: 12px;
+}
+
+.logo-text {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
