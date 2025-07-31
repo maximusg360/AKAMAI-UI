@@ -1,8 +1,7 @@
 export interface CpCode {
-  details: string;
-  groupId: string;
-  productId: string;
-  cpcodeName: string;
-  accountSwitchKey: string;
-  cpcodeId: string;
+  detail: string;
+  estimatedSeconds: number;
+  httpStatus: number;
+  purgeId: string;
+  supportId: string;
 }

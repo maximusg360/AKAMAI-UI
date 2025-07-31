@@ -7,12 +7,13 @@ import { ViewEncapsulation } from '@angular/core';
 
 
 export interface CpCode {
-  contractId: string;
-  groupId: string;
-  productId: string;
-  cpcodeName: string;
-  accountSwitchKey: string;
+  detail: string;
+  estimatedSeconds: number;
+  httpStatus: number;
+  purgeId: string;
+  supportId: string;
 }
+
 
 
 @Component({
@@ -27,21 +28,39 @@ export class CpcodeListComponent implements OnInit {
   ngOnInit(): void {
   // Enable filtering only by cpcodeName
   this.dataSource.filterPredicate = (data: CpCode, filter: string) =>
-    data.cpcodeName.toLowerCase().includes(filter);
+    data.purgeId.toLowerCase().includes(filter);
 }
   
 
   // Mock data
   cpCodes: CpCode[] = [
-    { contractId: 'ctr_123', groupId: 'grp_456', productId: 'prd_789', cpcodeName: 'DemoCode1', accountSwitchKey: 'swk_000' },
-    { contractId: 'ctr_222', groupId: 'grp_333', productId: 'prd_444', cpcodeName: 'DemoCode2', accountSwitchKey: 'swk_111' },
-    { contractId: 'ctr_123', groupId: 'grp_456', productId: 'prd_789', cpcodeName: 'DemoCode3', accountSwitchKey: 'swk_000' },
-    { contractId: 'ctr_222', groupId: 'grp_333', productId: 'prd_444', cpcodeName: 'DemoCode4', accountSwitchKey: 'swk_111' }
-  ];
+  {
+    detail: 'Invalidation complete',
+    estimatedSeconds: 30,
+    httpStatus: 200,
+    purgeId: 'pid_001',
+    supportId: 'sid_001'
+  },
+  {
+    detail: 'Request accepted',
+    estimatedSeconds: 45,
+    httpStatus: 202,
+    purgeId: 'pid_002',
+    supportId: 'sid_002'
+  },
+  {
+    detail: 'Pending request',
+    estimatedSeconds: 60,
+    httpStatus: 102,
+    purgeId: 'pid_003',
+    supportId: 'sid_003'
+  }
+];
+
   filteredDataSource: MatTableDataSource<CpCode> = new MatTableDataSource<CpCode>([]);
 
   dataSource = new MatTableDataSource<CpCode>(this.cpCodes);
-  displayedColumns: string[] = ['select', 'contractId', 'groupId', 'productId', 'cpcodeName', 'accountSwitchKey', 'actions'];
+  displayedColumns: string[] = ['select', 'detail', 'estimatedSeconds', 'httpStatus', 'purgeId', 'supportId', 'actions'];
   selection = new SelectionModel<any>(true, []);
   
 
@@ -52,10 +71,15 @@ onRowClicked(row: any): void {
  searchCPCode() {
   const filterValue = this.cpCodeInput.trim().toLowerCase();
   const filtered = this.cpCodes.filter(cp =>
-    cp.cpcodeName.toLowerCase().includes(filterValue)
+    cp.purgeId.toLowerCase().includes(filterValue)
   );
   this.filteredDataSource.data = filtered;
   this.isSearchPerformed = true;
+}
+clearSearch(): void {
+  this.cpCodeInput = '';
+  this.filteredDataSource.data = [];
+  this.isSearchPerformed = false;
 }
 
   // Master checkbox
@@ -79,11 +103,12 @@ onRowClicked(row: any): void {
 
   // Dummy action handlers
   delete(row: CpCode) {
-    alert(`Delete called for ${row.cpcodeName}`);
-  }
+  alert(`Delete called for Purge ID: ${row.purgeId}`);
+}
+
 
   invalidate(row: CpCode) {
-    alert(`Invalidate called for ${row.cpcodeName}`);
+    alert(`Invalidate called for Purge ID: ${row.purgeId}`);
   }
 
 
